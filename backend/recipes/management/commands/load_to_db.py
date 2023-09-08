@@ -1,7 +1,9 @@
 import csv
+
 from django.core.management import BaseCommand
-from recipes.models import Ingredient
 from django.db import IntegrityError
+from recipes.models import Ingredient
+
 
 class Command(BaseCommand):
 

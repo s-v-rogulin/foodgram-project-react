@@ -1,8 +1,7 @@
 from colorfield.fields import ColorField
+from core import constants, validators
 from django.contrib.auth import get_user_model
 from django.db import models
-
-from core import constants, validators
 from django.db.models import UniqueConstraint
 
 User = get_user_model()

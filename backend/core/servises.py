@@ -1,13 +1,12 @@
+from api.serializers import RecipeShortSerializer, SubscriptionSerializer
 from django.contrib.auth import get_user_model
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from recipes.models import Recipe, RecipeIngredientAmount
 from rest_framework import status
 from rest_framework.response import Response
-
-from api.serializers import RecipeShortSerializer, SubscriptionSerializer
-from recipes.models import Recipe, RecipeIngredientAmount
 from users.models import Subscription
 
 User = get_user_model()

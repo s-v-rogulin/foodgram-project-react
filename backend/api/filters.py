@@ -1,7 +1,6 @@
+from core.filters import get_queryset_filter
 from django.db.models import Q
 from django_filters.rest_framework import FilterSet, filters
-
-from core.filters import get_queryset_filter
 from recipes.models import Ingredient, Recipe, Tag
 
 

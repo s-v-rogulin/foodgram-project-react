@@ -1,9 +1,7 @@
 from drf_extra_fields.fields import Base64ImageField
-
+from recipes.models import RecipeIngredientAmount
 from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import ModelSerializer
-
-from recipes.models import RecipeIngredientAmount
 
 
 class CustomBaseSerializer(ModelSerializer):
@@ -37,9 +35,9 @@ class CustomBaseSerializer(ModelSerializer):
         if field := value:
             return field
         else:
-             raise ValidationError({
-                 "{field}": "Нельзя ничего не выбрать!"
-             })
+            raise ValidationError({
+                "{field}": "Нельзя ничего не выбрать!"
+            })
 
     def get_tag_and_ingredient(self, data):
         tags = data.pop('tags')

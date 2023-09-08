@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from django.core.validators import (MinLengthValidator, MaxValueValidator,
+from django.core.validators import (MaxValueValidator, MinLengthValidator,
                                     MinValueValidator, RegexValidator)
 
 
@@ -10,8 +10,10 @@ class MinTagColorLenghtValidator(MinLengthValidator):
 class MinMeasurementUnitLenghtValidator(MinLengthValidator):
     message = 'Единица измерения может состоять минимум из одного символа!'
 
+
 class TwoCharValidator(MinLengthValidator):
     message = 'Длина должна быть больше 2 символов'
+
 
 class MinCookingTimeValueValidator(MinValueValidator):
 

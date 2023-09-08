@@ -1,7 +1,6 @@
+from core import constants, validators
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
-from core import constants, validators
 
 
 class User(AbstractUser):
@@ -98,7 +97,7 @@ class Subscription(models.Model):
         verbose_name_plural = 'Подписки'
         constraints = (
             models.UniqueConstraint(
-                fields=['user','author',],
+                fields=['user', 'author',],
                 name='unique_subscription',
             ),
             models.CheckConstraint(
