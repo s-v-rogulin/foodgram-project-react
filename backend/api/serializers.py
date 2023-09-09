@@ -233,7 +233,7 @@ class WriteRecipeSerializer(CustomBaseSerializer):
         )
 
     def validate_ingredients(self, value):
-        ingredients = self.Not_empty_field(
+        ingredients = self.not_empty_field(
             field='ingredients', value=value
         )
         if not ingredients:
@@ -273,7 +273,7 @@ class WriteRecipeSerializer(CustomBaseSerializer):
         return value
 
     def validate_tags(self, value):
-        tags = self.Not_empty_field(
+        tags = self.not_empty_field(
             field='tags', value=value
         )
         if not tags:

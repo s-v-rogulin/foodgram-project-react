@@ -31,7 +31,7 @@ class CustomBaseSerializer(ModelSerializer):
             )for ingredient in ingredients]
         )
 
-    def Not_empty_field(self, field, value):
+    def not_empty_field(self, field, value):
         if field := value:
             return field
         else:
