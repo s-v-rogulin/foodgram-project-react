@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 
 volumes:
   static_food:
@@ -18,7 +18,7 @@ services:
       - ./.env
 
   backend:
-    image: stefa2003/FoodBack:latest
+    image: stefa2003/backend_foodgram:latest
     restart: always
     volumes:
       - static_food:/app/static/
@@ -29,7 +29,7 @@ services:
       - ./.env
 
   frontend:
-    image: stefa2003/FoodFront:latest
+    image: stefa2003/frontend_foodgram:latest
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
