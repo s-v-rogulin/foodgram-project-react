@@ -1,3 +1,8 @@
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.decorators import action
+from rest_framework.permissions import SAFE_METHODS
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+
 from api.filters import IngredientFilter, RecipeFilter
 from api.pagination import CustomPagination
 from api.permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly
@@ -7,11 +12,7 @@ from core.constants import ARGUMENTS_TO_ACTION_DECORATORS
 from core.servises import (create_and_download_shopping_cart,
                            creation_favorite_or_shopping_cart_recipe,
                            delete_recipe_from_favorite_or_shopping_cart)
-from django_filters.rest_framework import DjangoFilterBackend
 from recipes.models import Cart, FavoriteRecipe, Ingredient, Recipe, Tag
-from rest_framework.decorators import action
-from rest_framework.permissions import SAFE_METHODS
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 
 class IngredientViewSet(ReadOnlyModelViewSet):

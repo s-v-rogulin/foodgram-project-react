@@ -1,8 +1,9 @@
 from colorfield.fields import ColorField
-from core import constants, validators
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import UniqueConstraint
+
+from core import constants, validators
 
 User = get_user_model()
 
@@ -24,9 +25,7 @@ class Tag(models.Model):
         verbose_name='Цвет в HEX',
         max_length=constants.MAX_TAG_COLOR_LENGHT,
         help_text='Пропишите цвет в HEX формате',
-        unique=True,
-        blank=False,
-        null=False
+        unique=True
     )
     slug = models.SlugField(
         verbose_name='Уникальный слаг',

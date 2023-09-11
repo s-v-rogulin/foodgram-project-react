@@ -1,7 +1,8 @@
 from drf_extra_fields.fields import Base64ImageField
-from recipes.models import RecipeIngredientAmount
 from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import ModelSerializer
+
+from recipes.models import RecipeIngredientAmount
 
 
 class CustomBaseSerializer(ModelSerializer):

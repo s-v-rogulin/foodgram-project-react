@@ -1,17 +1,19 @@
 import re
 
-from core.constants import MAX_COOKING_TIME, MIN_AMOUNT, MIN_COOKING_TIME
-from core.serializers import CustomBaseSerializer
 from django.db import transaction
 from django.db.models import F
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from drf_extra_fields.fields import Base64ImageField
-from recipes.models import Ingredient, Recipe, RecipeIngredientAmount, Tag
 from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import (IntegerField, ModelSerializer,
                                         PrimaryKeyRelatedField,
                                         SerializerMethodField)
 from rest_framework.status import HTTP_400_BAD_REQUEST
+
+from core.constants import (MAX_AMOUNT, MAX_COOKING_TIME, MIN_AMOUNT,
+                            MIN_COOKING_TIME)
+from core.serializers import CustomBaseSerializer
+from recipes.models import Ingredient, Recipe, RecipeIngredientAmount, Tag
 from users.models import User
 
 
@@ -150,6 +152,7 @@ class RecipeIngredientAmountSerializer(ModelSerializer):
     """Serializer количества игредиента в рецепте."""
 
     id = IntegerField(write_only=True)
+    amount = IntegerField(min_value=MIN_AMOUNT, max_value=MAX_AMOUNT)
 
     class Meta:
         model = RecipeIngredientAmount
@@ -218,7 +221,8 @@ class WriteRecipeSerializer(CustomBaseSerializer):
     )
     image = Base64ImageField()
     author = CustomUserSerializer(read_only=True)
-    cooking_time = IntegerField()
+    cooking_time = IntegerField(min_value=MIN_COOKING_TIME, max_value=MAX_COOKING_TIME)
+
 
     class Meta:
         model = Recipe
@@ -240,15 +244,11 @@ class WriteRecipeSerializer(CustomBaseSerializer):
             raise ValidationError({
                 "ingredients": "Нельзя добавлять без ингредиентов!"
             })
-        ingredients_in_recipe = []
+        ingredients_in_recipe = set()
         for ingredient in ingredients:
             if ingredient in ingredients_in_recipe:
                 raise ValidationError({
                     "ingredients": "Вы уже добавили этот ингредиент!"
-                })
-            if int(ingredient['amount']) < MIN_AMOUNT:
-                raise ValidationError({
-                    "amount": "Количесво ингредиента не может быть меньше 1!"
                 })
             ingredients_in_recipe.append(ingredient)
         return value
@@ -260,18 +260,6 @@ class WriteRecipeSerializer(CustomBaseSerializer):
             })
         return value
 
-    def validate_cooking_time(self, value):
-        if value < MIN_COOKING_TIME:
-            raise ValidationError({
-                "cooking_time": "Время приготовления не может быть меньше 1!"
-            })
-        if value > MAX_COOKING_TIME:
-            raise ValidationError({
-                "cooking_time":
-                    "Время приготовления не может быть больше 1000!"
-            })
-        return value
-
     def validate_tags(self, value):
         tags = self.not_empty_field(
             field='tags', value=value
@@ -280,7 +268,7 @@ class WriteRecipeSerializer(CustomBaseSerializer):
             raise ValidationError({
                 "tags": "Добавьте хотя бы один тег!"
             })
-        tags_in_recipe = []
+        tags_in_recipe = set()
         for tag in tags:
             if tag in tags_in_recipe:
                 raise ValidationError({

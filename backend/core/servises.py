@@ -1,12 +1,13 @@
-from api.serializers import RecipeShortSerializer, SubscriptionSerializer
 from django.contrib.auth import get_user_model
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
-from recipes.models import Recipe, RecipeIngredientAmount
 from rest_framework import status
 from rest_framework.response import Response
+
+from api.serializers import RecipeShortSerializer, SubscriptionSerializer
+from recipes.models import Recipe, RecipeIngredientAmount
 from users.models import Subscription
 
 User = get_user_model()
@@ -54,7 +55,7 @@ def get_subscriptions_serializer_with_pages(request, pages):
 
 def creation_favorite_or_shopping_cart_recipe(model, user, id):
     recipe = get_object_or_404(Recipe, id=id)
-    if model.objects.filter(user=user, recipe=recipe).exists():
+    if user.favorites.filter(recipe=recipe).exists():
         return Response(
             {"errors": "Вы уже добавили этот рецепт!"},
             status=status.HTTP_400_BAD_REQUEST,
@@ -65,9 +66,7 @@ def creation_favorite_or_shopping_cart_recipe(model, user, id):
 
 
 def delete_recipe_from_favorite_or_shopping_cart(model, user, id):
-    favorite_or_in_shopping_cart_recipe = model.objects.filter(
-        user=user, recipe__id=id
-    )
+    favorite_or_in_shopping_cart_recipe = user.favorites.filter(recipe__id=id)
     if favorite_or_in_shopping_cart_recipe.exists():
         favorite_or_in_shopping_cart_recipe.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

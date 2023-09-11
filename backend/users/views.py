@@ -1,11 +1,12 @@
+from djoser.views import UserViewSet
+from rest_framework.decorators import action
+
 from api.pagination import CustomPagination
 from api.serializers import CustomUserSerializer
 from core.constants import ARGUMENTS_TO_ACTION_DECORATORS
 from core.servises import (create_subscription, delete_subscription,
                            get_author_in_subscription,
                            get_subscriptions_serializer_with_pages)
-from djoser.views import UserViewSet
-from rest_framework.decorators import action
 
 from .models import User
 

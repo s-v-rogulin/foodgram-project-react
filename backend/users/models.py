@@ -1,6 +1,7 @@
-from core import constants, validators
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+
+from core import constants, validators
 
 
 class User(AbstractUser):
