@@ -66,7 +66,9 @@ def creation_favorite_or_shopping_cart_recipe(model, user, id):
 
 
 def delete_recipe_from_favorite_or_shopping_cart(model, user, id):
-    favorite_or_in_shopping_cart_recipe = user.favorites.filter(recipe__id=id)
+    favorite_or_in_shopping_cart_recipe = model.objects.filter(
+        user=user, recipe__id=id
+    )
     if favorite_or_in_shopping_cart_recipe.exists():
         favorite_or_in_shopping_cart_recipe.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
