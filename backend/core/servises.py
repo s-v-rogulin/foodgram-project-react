@@ -55,7 +55,7 @@ def get_subscriptions_serializer_with_pages(request, pages):
 
 def creation_favorite_or_shopping_cart_recipe(model, user, id):
     recipe = get_object_or_404(Recipe, id=id)
-    if user.favorites.filter(recipe=recipe).exists():
+    if model.objects.filter(user=user, recipe=recipe).exists():
         return Response(
             {"errors": "Вы уже добавили этот рецепт!"},
             status=status.HTTP_400_BAD_REQUEST,
