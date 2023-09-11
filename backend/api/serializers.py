@@ -221,8 +221,10 @@ class WriteRecipeSerializer(CustomBaseSerializer):
     )
     image = Base64ImageField()
     author = CustomUserSerializer(read_only=True)
-    cooking_time = IntegerField(min_value=MIN_COOKING_TIME, max_value=MAX_COOKING_TIME)
-
+    cooking_time = IntegerField(
+        min_value=MIN_COOKING_TIME,
+        max_value=MAX_COOKING_TIME
+    )
 
     class Meta:
         model = Recipe
