@@ -59,7 +59,7 @@ def creation_favorite_or_shopping_cart_recipe(model, user, id):
         return Response(
             {"errors": "Вы уже добавили этот рецепт!"},
             status=status.HTTP_400_BAD_REQUEST,
-    )
+        )
     model.objects.create(user=user, recipe=recipe)
     serializer = RecipeShortSerializer(recipe)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
