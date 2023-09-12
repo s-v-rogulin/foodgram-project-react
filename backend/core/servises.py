@@ -101,6 +101,7 @@ def create_and_download_shopping_cart(user):
         'ingredient__name',
         'ingredient__measurement_unit'
     ).annotate(in_shopping_cart_ingredient_amount=Sum('amount'))
+    
     shopping_list_date = timezone.now()
     cart_text = _create_shopping_cart_text(
         user, ingredients, shopping_list_date

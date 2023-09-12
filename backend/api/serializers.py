@@ -10,8 +10,8 @@ from rest_framework.serializers import (IntegerField, ModelSerializer,
                                         SerializerMethodField)
 from rest_framework.status import HTTP_400_BAD_REQUEST
 
-from core.constants import (MAX_COOKING_TIME,
-                            MIN_COOKING_TIME)
+from core.constants import (MAX_COOKING_TIME, MIN_AMOUNT,
+                            MIN_COOKING_TIME, MAX_AMOUNT)
 from core.serializers import CustomBaseSerializer
 from recipes.models import Ingredient, Recipe, RecipeIngredientAmount, Tag
 from users.models import User
@@ -152,7 +152,7 @@ class RecipeIngredientAmountSerializer(ModelSerializer):
     """Serializer количества игредиента в рецепте."""
 
     id = IntegerField(write_only=True)
-
+    amount = IntegerField(min_value=MIN_AMOUNT, max_value=MAX_AMOUNT)
     class Meta:
         model = RecipeIngredientAmount
         fields = (
@@ -245,7 +245,7 @@ class WriteRecipeSerializer(CustomBaseSerializer):
             raise ValidationError({
                 "ingredients": "Нельзя добавлять без ингредиентов!"
             })
-        ingredients_in_recipe = set()
+        ingredients_in_recipe = []
         for ingredient in ingredients:
             if ingredient in ingredients_in_recipe:
                 raise ValidationError({
@@ -269,7 +269,7 @@ class WriteRecipeSerializer(CustomBaseSerializer):
             raise ValidationError({
                 "tags": "Добавьте хотя бы один тег!"
             })
-        tags_in_recipe = set()
+        tags_in_recipe = []
         for tag in tags:
             if tag in tags_in_recipe:
                 raise ValidationError({
