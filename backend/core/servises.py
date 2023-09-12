@@ -117,11 +117,11 @@ def create_and_download_shopping_cart(user):
                 'total_amount': amount
             }
 
-    merged_ingredients = list(ingredients_dict.values())
+    ingredients = list(ingredients_dict.values())
 
     shopping_list_date = timezone.now()
     cart_text = _create_shopping_cart_text(
-        user, merged_ingredients, shopping_list_date
+        user, ingredients, shopping_list_date
     )
 
     response = HttpResponse(cart_text, content_type='text/plain')
