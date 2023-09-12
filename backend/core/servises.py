@@ -94,21 +94,21 @@ def _create_shopping_cart_text(user, ingredients, date):
     return text
 
 
-def create_and_download_shopping_cart(user): 
-    ingredients = RecipeIngredientAmount.objects.filter( 
-        recipe__shopping_cart__user=user 
-    ).values( 
-        'ingredient__name', 
-        'ingredient__measurement_unit' 
+def create_and_download_shopping_cart(user):
+    ingredients = RecipeIngredientAmount.objects.filter(
+        recipe__shopping_cart__user=user
+    ).values(
+        'ingredient__name',
+        'ingredient__measurement_unit'
     ).annotate(in_shopping_cart_ingredient_amount=Sum('amount')).order_by('ingredient__name')
 
-    shopping_list_date = timezone.now() 
-    cart_text = _create_shopping_cart_text( 
-        user, ingredients, shopping_list_date 
-    ) 
+    shopping_list_date = timezone.now()
+    cart_text = _create_shopping_cart_text(
+        user, ingredients, shopping_list_date
+    )
 
-    response = HttpResponse(cart_text, content_type='text/plain') 
-    response['Content-Disposition'] = ( 
-        'attachment; filename="Foodgram_shopping_cart.txt"' 
-    ) 
+    response = HttpResponse(cart_text, content_type='text/plain')
+    response['Content-Disposition'] = (
+        'attachment; filename="Foodgram_shopping_cart.txt"'
+    )
     return response
