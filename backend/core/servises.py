@@ -121,5 +121,3 @@ def create_and_download_shopping_cart(user):
         'attachment; filename="Foodgram_shopping_cart.txt"'
     )
     return response
-
-
