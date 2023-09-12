@@ -74,6 +74,3 @@ docker-compose exec backend python manage.py collectstatic --no-input
 ```
 docker-compose exec backend python manage.py createsuperuser
 ```
-=======
-
->>>>>>> a91943484a4725d5d25a41bd417757ec8504010a
