@@ -152,7 +152,6 @@ class RecipeIngredientAmountSerializer(ModelSerializer):
     """Serializer количества игредиента в рецепте."""
 
     id = IntegerField(write_only=True)
-    amount = IntegerField(min_value=MIN_AMOUNT, max_value=MAX_AMOUNT)
 
     class Meta:
         model = RecipeIngredientAmount
