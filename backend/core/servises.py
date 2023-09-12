@@ -100,10 +100,28 @@ def create_and_download_shopping_cart(user):
     ).values(
         'ingredient__name',
         'ingredient__measurement_unit'
-    ).annotate(in_shopping_cart_ingredient_amount=Sum('amount'))
+    ).annotate(total_amount=Sum('amount')).order_by('ingredient__name')
+
+    ingredients_dict = {}
+    for ingredient in ingredients:
+        name = ingredient['ingredient__name']
+        measurement_unit = ingredient['ingredient__measurement_unit']
+        amount = ingredient['total_amount']
+
+        if name in ingredients_dict:
+            ingredients_dict[name]['total_amount'] += amount
+        else:
+            ingredients_dict[name] = {
+                'ingredient__name': name,
+                'ingredient__measurement_unit': measurement_unit,
+                'total_amount': amount
+            }
+
+    merged_ingredients = list(ingredients_dict.values())
+
     shopping_list_date = timezone.now()
     cart_text = _create_shopping_cart_text(
-        user, ingredients, shopping_list_date
+        user, merged_ingredients, shopping_list_date
     )
 
     response = HttpResponse(cart_text, content_type='text/plain')
