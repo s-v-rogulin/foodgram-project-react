@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.contrib.auth import get_user_model
 from django.db.models import Sum
 from django.http import HttpResponse
@@ -95,6 +97,8 @@ def _create_shopping_cart_text(user, ingredients, date):
 
 
 def create_and_download_shopping_cart(user):
+    ingredient_dict = defaultdict(int)
+
     ingredients = RecipeIngredientAmount.objects.filter(
         recipe__shopping_cart__user=user
     ).values(
@@ -102,9 +106,14 @@ def create_and_download_shopping_cart(user):
         'ingredient__measurement_unit'
     ).annotate(in_shopping_cart_ingredient_amount=Sum('amount'))
 
+    for ingredient in ingredients:
+        ingredient_name = ingredient['ingredient__name']
+        ingredient_amount = ingredient['in_shopping_cart_ingredient_amount']
+        ingredient_dict[ingredient_name] += ingredient_amount
+
     shopping_list_date = timezone.now()
     cart_text = _create_shopping_cart_text(
-        user, ingredients, shopping_list_date
+        user, ingredient_dict.items(), shopping_list_date
     )
 
     response = HttpResponse(cart_text, content_type='text/plain')
@@ -112,3 +121,4 @@ def create_and_download_shopping_cart(user):
         'attachment; filename="Foodgram_shopping_cart.txt"'
     )
     return response
+

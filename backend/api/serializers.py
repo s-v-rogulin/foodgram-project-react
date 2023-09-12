@@ -10,8 +10,8 @@ from rest_framework.serializers import (IntegerField, ModelSerializer,
                                         SerializerMethodField)
 from rest_framework.status import HTTP_400_BAD_REQUEST
 
-from core.constants import (MAX_COOKING_TIME, MIN_AMOUNT,
-                            MIN_COOKING_TIME, MAX_AMOUNT)
+from core.constants import (MAX_AMOUNT, MAX_COOKING_TIME, MIN_AMOUNT,
+                            MIN_COOKING_TIME)
 from core.serializers import CustomBaseSerializer
 from recipes.models import Ingredient, Recipe, RecipeIngredientAmount, Tag
 from users.models import User
