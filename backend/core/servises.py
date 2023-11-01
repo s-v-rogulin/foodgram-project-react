@@ -1,8 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.db.models import Sum
 from django.http import HttpResponse
+from django.utils import timezone as tz
 from django.shortcuts import get_object_or_404
-from django.utils import timezone
 from rest_framework import status
 from rest_framework.response import Response
 
@@ -78,7 +78,7 @@ def delete_recipe_from_favorite_or_shopping_cart(model, user, id):
     )
 
 
-def _create_shopping_cart_text(user, ingredients, date):
+def cart_text(user, ingredients, date):
     text = (
         f'Bonjour, {user.first_name}!\n\n'
         f'Ваш список покупок на {date.strftime("%d.%m")}.\n\n'
@@ -94,22 +94,22 @@ def _create_shopping_cart_text(user, ingredients, date):
     return text
 
 
-def create_and_download_shopping_cart(user):
+def create_and_download_shopping_cart(self, request, user):
     ingredients = RecipeIngredientAmount.objects.filter(
-        recipe__shopping_cart__user=user
+        recipe__shopping_cart__user=self.request.user
     ).values(
         'ingredient__name',
         'ingredient__measurement_unit'
     ).annotate(
         in_shopping_cart_ingredient_amount=Sum('amount')
     ).order_by('ingredient__name')
-    shopping_list_date = timezone.now()
-    cart_text = _create_shopping_cart_text(
-        user, ingredients, shopping_list_date
+    shopping_list_date = tz.now()
+    cart_text = self.cart_text(
+        self.request.user, ingredients, shopping_list_date
     )
 
     response = HttpResponse(cart_text, content_type='text/plain')
     response['Content-Disposition'] = (
-        'attachment; filename="Foodgram_shopping_cart.txt"'
+        'attachment; filename="Foodgram_Shopping_cart.txt"'
     )
     return response
